@@ -4,8 +4,6 @@ import { Grid, Paper } from '@material-ui/core'
 
 import PostCreate from './posts/PostCreate'
 import PostCards from './posts/PostCards'
-
-
 import axios from 'axios'
 
 const useStyles = makeStyles(theme => ({
@@ -21,11 +19,11 @@ const DashBoard = () => {
     const classes = useStyles();
 
     const getAllPosts = async () => {
-        const posts = await axios.get("http://localhost:4000/posts");
-        setPosts(Object.keys(posts.data).map(key => posts.data[key]));
+        const posts = await axios.get("http://localhost:4002/posts");
+        setPosts(posts.data);
     }
 
-    const [posts, setPosts] = React.useState([]);
+    const [posts, setPosts] = React.useState({});
 
     React.useEffect(() => {
         getAllPosts();
@@ -43,7 +41,7 @@ const DashBoard = () => {
                 </Paper>
             </Grid>
             <Grid item sm={12} >
-                <PostCards posts={posts} />
+                <PostCards posts={posts} onCreate={handleOnCreate} />
             </Grid>
         </Grid>
     )

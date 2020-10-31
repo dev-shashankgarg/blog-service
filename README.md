@@ -15,4 +15,27 @@ npm install
 cd ../blog-service/posts
 npm install
 
+cd ../blog-service/event-bus
+npm install
+
+cd ../blog-service/query
+npm install
+```
+
+## Local Run
+```
+cd  blog-service/comments
+npm start
+
+cd  blog-service/posts
+npm start
+
+cd  blog-service/event-bus
+npm start
+
+cd  blog-service/query
+npm start
+
+cd  blog-service/client
+npm start
 ```

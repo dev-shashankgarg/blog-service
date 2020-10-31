@@ -47,27 +47,12 @@ const useStyles = makeStyles(theme => ({
 const PostCards = (props) => {
 
     const classes = useStyles();
-
-    const loadComments = async (ids) => {
-        let data = {};
-        for (let index = 0; index < ids.length; index++) {
-            let comments = await axios.get(`http://localhost:4001/posts/${ids[index]}/comments`);
-            data[ids[index]] = comments.data;
-        }
-        setComments(data);
-    }
-
-    const [comments, setComments] = React.useState({});
     const [nComment, setNComment] = React.useState({});
-
-    React.useEffect(() => {
-        loadComments(props.posts.map(post => post.id));
-    }, [props.posts])
 
     const handleAddComment = (postId) => async () => {
         if (nComment[postId]) {
             await axios.post(`http://localhost:4001/posts/${postId}/comment`, { 'comment': nComment[postId] });
-            loadComments(props.posts.map(post => post.id));
+            props.onCreate();
             setNComment({ ...nComment, [postId]: '' });
         }
     }
@@ -75,34 +60,34 @@ const PostCards = (props) => {
     return (
         <Grid container spacing={1}>
             {
-                props.posts.map(post => {
+                Object.keys(props.posts).map(id => {
                     return (
-                        <Grid item sm={2} key={post.id}>
+                        <Grid item sm={2} key={id}>
                             <Paper className={classes.postCard} variant="outlined">
                                 <Grid container className={classes.postTitleContainer}>
                                     <Grid item sm={2}>
                                         <BookIcon style={{ color: "white" }} />
                                     </Grid>
                                     <Grid item sm={10}>
-                                        <Typography className={classes.postTitle}>{post.title.toUpperCase()}</Typography>
+                                        <Typography className={classes.postTitle}>{props.posts[id].title.toUpperCase()}</Typography>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={1} justify="space-evenly">
                                     <Grid item sm={12} style={{ paddingLeft: "8px" }}>
-                                        <Typography variant="overline">{`Comments: ${comments[post.id] ? comments[post.id].length : 0}`}</Typography>
+                                        <Typography variant="overline">{`Comments: ${props.posts[id].comments.length}`}</Typography>
                                     </Grid>
                                     <Grid item sm={12} className={classes.commentDisplayContainer}>
                                         <List dense >
                                             {
-                                                (comments[post.id] || []).map(comment => {
-                                                    return <ListItem key={comment.id} dense divider>
+                                                (props.posts[id].comments).map(comment => {
+                                                    return (<ListItem key={comment.id} dense divider>
                                                         <ListItemIcon>
                                                             <ChatIcon />
                                                         </ListItemIcon>
                                                         <ListItemText
                                                             primary={comment.comment}
                                                         />
-                                                    </ListItem>
+                                                    </ListItem>)
                                                 })
                                             }
                                         </List>
@@ -116,14 +101,14 @@ const PostCards = (props) => {
                                             variant="outlined"
                                             fullWidth
                                             size="small"
-                                            value={nComment[post.id] || ''}
+                                            value={nComment[id] || ''}
                                             onChange={(event => {
-                                                setNComment({ ...nComment, [post.id]: event.target.value });
+                                                setNComment({ ...nComment, [id]: event.target.value });
                                             })}
                                         />
                                     </Grid>
                                     <Grid item sm={3}>
-                                        <Fab color="primary" aria-label="add" size="small" onClick={handleAddComment(post.id)} >
+                                        <Fab color="primary" aria-label="add" size="small" onClick={handleAddComment(id)} >
                                             <CreateIcon />
                                         </Fab>
                                     </Grid>
