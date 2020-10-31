@@ -4,14 +4,14 @@ import { TextField, Grid, Fab } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 
 
-const PostCreate = () => {
+const PostCreate = (props) => {
 
     const [title, setTitle] = React.useState('');
 
     const onCreate = async (event) => {
         if (title) {
             const response = await axios.post("http://localhost:4000/posts", { title });
-            console.log(response)
+            props.onCreate();
             setTitle('');
         }
     }
