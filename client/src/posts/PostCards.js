@@ -85,7 +85,7 @@ const PostCards = (props) => {
                                                             <ChatIcon />
                                                         </ListItemIcon>
                                                         <ListItemText
-                                                            primary={comment.comment}
+                                                            primary={getComment(comment.comment, comment.moderation)}
                                                         />
                                                     </ListItem>)
                                                 })
@@ -118,6 +118,14 @@ const PostCards = (props) => {
                 })
             }
         </Grid>)
+}
+
+const getComment = (content, status) => {
+    switch (status) {
+        case "pending": { return (<i>this comment is pending moderation </i>); }
+        case "rejected": { return (<strike>this comment is deleted </strike>); }
+        case "approved": return content;
+    }
 }
 
 export default PostCards;

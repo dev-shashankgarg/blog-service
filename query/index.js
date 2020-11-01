@@ -28,7 +28,13 @@ app.post("/events", (req, res) => {
             break;
         }
         case "COMMENT_CREATED": {
-            posts[event.id].comments.push({ id: event.commentId, comment: event.comment });
+            posts[event.id].comments.push({ id: event.commentId, comment: event.comment, moderation: event.moderation });
+            break;
+        }
+        case "COMMENT_UPDATED": {
+            console.log(JSON.stringify(event));
+            let comment = posts[event.id].comments.find(cm => cm.id === event.commentId);
+            comment.moderation = event.moderation;
             break;
         }
     }

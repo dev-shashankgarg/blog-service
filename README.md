@@ -20,6 +20,9 @@ npm install
 
 cd ../blog-service/query
 npm install
+
+cd ../blog-service/moderation
+npm install
 ```
 
 ## Local Run
@@ -34,6 +37,9 @@ cd  blog-service/event-bus
 npm start
 
 cd  blog-service/query
+npm start
+
+cd  blog-service/moderation
 npm start
 
 cd  blog-service/client
